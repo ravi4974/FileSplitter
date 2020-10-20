@@ -14,6 +14,11 @@ def join(filepath):
     _,_,dirfiles=next(os.walk(partdir))
     dirfiles.sort()
 
+    for idx,dirfile in enumerate(dirfiles):
+        if not dirfile.endswith(str(idx)):
+            print("MissingPartFile: {}.part{} is missing...".format(actual_file,idx))
+            sys.exit(3)
+
     with open(actual_file,'wb+') as f:
         for dirfile in dirfiles:
             dirfile=os.path.join(partdir,dirfile)
