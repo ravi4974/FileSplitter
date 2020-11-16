@@ -18,7 +18,7 @@ def join(filepath):
 
     for idx in range(len(dirfiles)):
         dirfile=os.path.join(partdir,'{}.part{}'.format(actual_file,idx))
-        if not os.path.isfile(dirname):
+        if not os.path.isfile(dirfile):
             print("MissingPartFile: {}.part{} is missing...".format(actual_file,idx))
             sys.exit(3)
 
