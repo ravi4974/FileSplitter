@@ -12,20 +12,27 @@ def join(filepath):
     
     partdir=os.path.dirname(actual_file)
     _,_,dirfiles=next(os.walk(partdir))
-    dirfiles.sort()
 
-    for idx,dirfile in enumerate(dirfiles):
-        if not dirfile.endswith(str(idx)):
+    actual_filename=os.path.basename(actual_file)
+    dirfiles=[dirfile for dirfile in dirfiles if dirfile.startswith(actual_filename+'.part')]
+
+    for idx in range(len(dirfiles)):
+        dirfile=os.path.join(partdir,'{}.part{}'.format(actual_file,idx))
+        if not os.path.isfile(dirname):
             print("MissingPartFile: {}.part{} is missing...".format(actual_file,idx))
             sys.exit(3)
 
     with open(actual_file,'wb+') as f:
-        for dirfile in dirfiles:
-            dirfile=os.path.join(partdir,dirfile)
-            if dirfile.startswith(actual_file+'.part'):
+        for idx in range(len(dirfiles)):
+            dirfile=os.path.join(partdir,'{}.part{}'.format(actual_file,idx))
+            if os.path.isfile(dirfile):
                 print("Processing part file {}...".format(dirfile))
                 with open(dirfile,'rb') as pf:
                     f.write(pf.read())
+            else:
+                # if deleted in between
+                print("MissingPartFile: {}.part{} is missing...".format(actual_file,idx))
+                sys.exit(3)
 
 def main():
     if len(sys.argv)<2:
